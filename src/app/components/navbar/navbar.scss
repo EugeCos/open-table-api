@@ -1,0 +1,13 @@
+.navbar {
+    padding: 10px 0;
+    position: fixed;
+    width: 100%;
+    z-index: 10;
+
+    img {
+        float: right;
+        margin-right: 50px;
+        width: 230px;
+        cursor: pointer
+    }
+}
