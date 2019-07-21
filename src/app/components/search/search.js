@@ -61,7 +61,7 @@ export class Search extends Component {
           </div>
         </div>
 
-        <RestaurantList />
+        <RestaurantList searchOption={searchOption} searchValue={searchValue} />
       </div>
     );
   }

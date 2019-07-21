@@ -18,7 +18,6 @@ export const fetchCommon = (
   if (!!cityOrRestaurant) {
     url = `http://opentable.herokuapp.com/api/restaurants?${cityOrRestaurant}=${name}&per_page=${perPage}&page=${pageNumber}`;
   } else url = "http://opentable.herokuapp.com/api/stats";
-  console.log(url);
   //   3. Call API
   const response = await fetch(url);
   const jsonData = await response.json();

@@ -5,6 +5,7 @@
 
     .filters-container {
         width: 25%;
+        margin-top: 10px;
 
         .fa-money-bill-wave {
             color: rgb(0, 195, 255)
@@ -30,16 +31,69 @@
                 }
             }
         }
-
-
     }
 
     .list-container {
-        border: 1px solid yellow;
         width: 75%;
 
-        h4 {
-            text-align: center
+        h3 {
+            text-align: center;
+            letter-spacing: 2px
+        }
+
+        .list-item-wrapper {
+            border: 1px solid rgba(80, 66, 66, 0.568);
+            box-shadow: 0 0 6px rgba(104, 91, 67, 0.425);
+            background-color: rgba(34, 32, 27, 0.856);
+            margin: 24px 0;
+            padding: 10px 15px;
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+
+            &:hover {
+                background-color: rgba(24, 23, 21, 0.932);
+            }
+
+            .image-wrapper {
+                width: 20%;
+
+                img {
+                    max-width: 120px;
+                    border: 1px solid rgb(85, 85, 85);
+                    border-radius: 2px
+                }
+            }
+
+            .description-wrapper {
+                width: 50%;
+
+                h2 {
+                    margin-bottom: 0.8rem;
+                    color: rgb(255, 157, 44)
+                }
+
+                h4 {
+                    margin-bottom: .5rem
+                }
+            }
+
+            .price-wrapper {
+                width: 20%;
+
+                .fas {
+                    font-size: 2rem;
+                    margin-right: 10px;
+                    color: goldenrod;
+                    text-shadow: 0 0 12px rgb(189, 122, 34);
+                }
+
+                .greyed {
+                    color: rgba(85, 85, 85, 0.61);
+                    text-shadow: 0 0 12px rgba(128, 128, 128, 0.39)
+                }
+            }
         }
     }
 }
