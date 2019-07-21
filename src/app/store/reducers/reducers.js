@@ -1,5 +1,5 @@
-import testing from "./test";
+import currentPage from "./currentPage";
 
 export const reducers = {
-  testing
+  currentPage
 };
