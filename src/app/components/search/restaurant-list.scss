@@ -1,0 +1,45 @@
+.restaurant-list-container {
+    // border: 1px solid tomato;
+    margin-top: 2rem;
+    display: flex;
+
+    .filters-container {
+        width: 25%;
+
+        .fa-money-bill-wave {
+            color: rgb(0, 195, 255)
+        }
+
+        .price-filter {
+            p {
+                display: inline-block;
+                padding: 10px 15px;
+                margin: 15px 0;
+                width: 55px;
+                text-align: center;
+                border: 1px solid rgb(92, 92, 92);
+                background: rgba(128, 128, 128, 0.062);
+                color: grey;
+                letter-spacing: 4px;
+                cursor: pointer;
+
+                &.selected {
+                    border: 2px solid rgb(0, 195, 255);
+                    background: rgba(105, 171, 209, 0.274);
+                    color: #fff;
+                }
+            }
+        }
+
+
+    }
+
+    .list-container {
+        border: 1px solid yellow;
+        width: 75%;
+
+        h4 {
+            text-align: center
+        }
+    }
+}

@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { updatePage } from "../../store/actions/user-actions";
 import { fetchStats, fetchRestaurants } from "../../store/actions/api-actions";
 import TextField from "material-ui/TextField";
+import RestaurantList from "./restaurant-list";
 import "./search.scss";
 
 export class Search extends Component {
@@ -44,19 +45,23 @@ export class Search extends Component {
     const { searchOption, searchValue } = this.state;
     const { generalInfo } = this.props;
     return (
-      <div className="search-container">
-        <div className="left-side-wrapper">
-          <GeneralDataDisplay generalInfo={generalInfo} />
+      <div className="search-page-container">
+        <div className="search-box-wrapper">
+          <div className="left-side-wrapper">
+            <GeneralDataDisplay generalInfo={generalInfo} />
+          </div>
+          <div className="right-side-wrapper">
+            <SearchArea
+              searchOption={searchOption}
+              searchValue={searchValue}
+              handleClick={this.handleClick}
+              handleSubmit={this.handleSubmit}
+              handleChange={this.handleChange}
+            />
+          </div>
         </div>
-        <div className="right-side-wrapper">
-          <SearchArea
-            searchOption={searchOption}
-            searchValue={searchValue}
-            handleClick={this.handleClick}
-            handleSubmit={this.handleSubmit}
-            handleChange={this.handleChange}
-          />
-        </div>
+
+        <RestaurantList />
       </div>
     );
   }

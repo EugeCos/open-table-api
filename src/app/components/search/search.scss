@@ -1,10 +1,13 @@
-.search-container {
+.search-page-container {
     position: relative;
     color: #fff;
     z-index: 3;
-    top: 18%;
     width: 80vw;
     margin: 0 auto;
+    top: 18%;
+}
+
+.search-box-wrapper {
     display: flex;
     border: 1px solid rgb(78, 37, 30);
 
