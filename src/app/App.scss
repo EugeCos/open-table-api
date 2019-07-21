@@ -3,6 +3,7 @@
     background-size: cover;
     background-position: center;
     height: 100vh;
+    z-index: 1;
 
     &:after {
         content: "";
@@ -14,11 +15,47 @@
         top: 0;
         left: 0;
         background-color: rgba(black, 0.1);
-        transition: background-color .4s
+        transition: background-color .4s;
     }
 
-    &.faded-background::after {
+    &.faded-background:after {
         background-color: rgba(black, 0.9);
-        transition: background-color .4s
+        transition: background-color .4s;
+        z-index: 2
     }
+}
+
+button {
+    z-index: 1;
+    position: relative;
+    font-size: 1rem;
+    color: #333;
+    padding: 0.9em 2.5em;
+    outline: none;
+    border: none;
+    background-color: hsl(32, 100%, 50%);
+}
+
+button:hover {
+    cursor: pointer;
+}
+
+button::before {
+    content: '';
+    z-index: -1;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border: 4px solid hsl(32, 100%, 50%);
+    transform-origin: center;
+    transform: scale(1);
+}
+
+button:hover::before {
+    transition: all 0.75s ease-in-out;
+    transform-origin: center;
+    transform: scale(1.75);
+    opacity: 0;
 }

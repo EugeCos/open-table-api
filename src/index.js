@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { Router } from "react-router-dom";
 import { createBrowserHistory } from "history";
+import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import store from "./app/store";
 import "./index.scss";
 import App from "./app/App";
@@ -12,9 +13,11 @@ const history = createBrowserHistory();
 
 ReactDOM.render(
   <Provider store={store}>
-    <Router history={history}>
-      <App />
-    </Router>
+    <MuiThemeProvider>
+      <Router history={history}>
+        <App />
+      </Router>
+    </MuiThemeProvider>
   </Provider>,
   document.getElementById("root")
 );
