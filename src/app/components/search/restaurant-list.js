@@ -7,7 +7,7 @@ export class RestaurantList extends Component {
   constructor() {
     super();
     this.state = {
-      priceFilter: [],
+      priceFilter: ["displayAll"],
       resultsMessage: ""
     };
   }
@@ -33,14 +33,31 @@ export class RestaurantList extends Component {
     }
   }
 
+  handlePriceFilter = selectedRating => {
+    const priceFilterArrayCopy = this.state.priceFilter;
+    const selecetItemIndex = priceFilterArrayCopy.indexOf(selectedRating);
+
+    // Add or remove selected price filters
+    if (selecetItemIndex > -1) {
+      priceFilterArrayCopy.splice(selecetItemIndex, 1);
+    } else priceFilterArrayCopy.push(selectedRating);
+
+    this.setState({ priceFilter: priceFilterArrayCopy });
+  };
+
   render() {
     const { restaurants } = this.props;
+    const { priceFilter, resultsMessage } = this.state;
     return (
       <div className="restaurant-list-container">
-        <Filters />
+        <Filters
+          handlePriceFilter={this.handlePriceFilter}
+          priceFilter={priceFilter}
+        />
         <List
           restaurantsData={restaurants}
-          resultsMessage={this.state.resultsMessage}
+          resultsMessage={resultsMessage}
+          priceFilter={priceFilter}
         />
       </div>
     );
@@ -58,29 +75,38 @@ export default connect(
   {}
 )(RestaurantList);
 
-export const Filters = props => {
+export const Filters = ({ handlePriceFilter, priceFilter }) => {
   return (
     <div className="filters-container">
       <i className="fa fa-money-bill-wave" />
       &nbsp;&nbsp;&nbsp;Price filter
       <div className="price-filter">
-        <p className="selected">
+        <p
+          className={`${priceFilter.indexOf(2) > -1 && "selected"}`}
+          onClick={() => handlePriceFilter(2)}
+        >
           <i className="fas fa-dollar-sign" />
           <i className="fas fa-dollar-sign" />
         </p>
-        <p>
+        <p
+          className={`${priceFilter.indexOf(3) > -1 && "selected"}`}
+          onClick={() => handlePriceFilter(3)}
+        >
           <i className="fas fa-dollar-sign" />
           <i className="fas fa-dollar-sign" />
           <i className="fas fa-dollar-sign" />
         </p>
-        <p>
+        <p
+          className={`${priceFilter.indexOf(4) > -1 && "selected"}`}
+          onClick={() => handlePriceFilter(4)}
+        >
           <i className="fas fa-dollar-sign" />
           <i className="fas fa-dollar-sign" />
           <i className="fas fa-dollar-sign" />
           <i className="fas fa-dollar-sign" />
         </p>
       </div>
-      <i class="fas fa-list-ol" />
+      <i className="fas fa-list-ol" />
       &nbsp;&nbsp;&nbsp;Restaurants per page
       <div className="display-per-page-filter">
         <p className="">5</p>
@@ -94,10 +120,20 @@ export const Filters = props => {
   );
 };
 
-export const List = ({ restaurantsData, resultsMessage }) => {
+export const List = ({ restaurantsData, resultsMessage, priceFilter }) => {
   const { current_page, restaurants } = restaurantsData;
 
-  const restaurantListJSX = restaurants.map((item, index) => {
+  // Filter restaurants by price rating
+  let filteredRestaurantList = restaurants;
+  // If array contains any values apart from "displayAll", do filtering
+  if (priceFilter.length !== 1) {
+    filteredRestaurantList = restaurants.filter(
+      item => priceFilter.indexOf(item.price) > -1
+    );
+  }
+
+  // Display filtered restaurants
+  const restaurantListJSX = filteredRestaurantList.map((item, index) => {
     return (
       <div className="list-item-wrapper" key={index}>
         <div className="image-wrapper">
@@ -125,9 +161,9 @@ export const List = ({ restaurantsData, resultsMessage }) => {
       <h3>{resultsMessage}</h3>
       {restaurantListJSX}
       <div className="page-indicator-container">
-        <i class="fas fa-angle-left" />
+        <i className="fas fa-angle-left" />
         <h4>Page 1</h4>
-        <i class="fas fa-angle-right" />
+        <i className="fas fa-angle-right" />
       </div>
     </div>
   );
