@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { capitalizeFirstLetter } from "../../services/utils";
+import { fetchRestaurants } from "../../store/actions/api-actions";
 import { connect } from "react-redux";
 import Spinner from "../common/spinner";
 import "./restaurant-list.scss";
@@ -44,7 +45,16 @@ export class RestaurantList extends Component {
   };
 
   updateDisplayPerPage = num => {
+    const {
+      searchValue,
+      searchOption,
+      pageNumber,
+      fetchRestaurants
+    } = this.props;
     this.setState({ displayPerPage: num });
+
+    if (!!searchValue)
+      fetchRestaurants(searchValue, searchOption, num, pageNumber);
   };
 
   render() {
@@ -80,7 +90,7 @@ export const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  {}
+  { fetchRestaurants }
 )(RestaurantList);
 
 export const Filters = ({
@@ -92,7 +102,7 @@ export const Filters = ({
   const displayPerPageOptionsJSX = [5, 10, 15, 25, 50, 100].map(option => {
     return (
       <p
-        className={option === displayPerPage ? "selected" : ""}
+        className={`${option === displayPerPage && "selected"}`}
         key={option}
         onClick={() => updateDisplayPerPage(option)}
       >
@@ -139,7 +149,7 @@ export const Filters = ({
 };
 
 export const List = ({ restaurantsData, resultsMessage, priceFilter }) => {
-  const { current_page, restaurants } = restaurantsData;
+  const { restaurants } = restaurantsData;
 
   // Filter restaurants by price rating
   let filteredRestaurantList = restaurants;

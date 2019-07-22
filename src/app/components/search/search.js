@@ -43,7 +43,7 @@ export class Search extends Component {
   };
 
   render() {
-    const { searchOption, searchValue } = this.state;
+    const { searchOption, searchValue, pageNumber } = this.state;
     const { generalInfo } = this.props;
     return (
       <div className="search-page-container">
@@ -59,6 +59,7 @@ export class Search extends Component {
             <SearchArea
               searchOption={searchOption}
               searchValue={searchValue}
+              pageNumber={pageNumber}
               handleClick={this.handleClick}
               handleSubmit={this.handleSubmit}
               handleChange={this.handleChange}
