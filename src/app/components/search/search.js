@@ -4,6 +4,7 @@ import { updatePage } from "../../store/actions/user-actions";
 import { fetchStats, fetchRestaurants } from "../../store/actions/api-actions";
 import TextField from "material-ui/TextField";
 import RestaurantList from "./restaurant-list";
+import Spinner from "../common/spinner";
 import "./search.scss";
 
 export class Search extends Component {
@@ -21,7 +22,7 @@ export class Search extends Component {
     updatePage("search");
 
     // Only call fetchStats on initial page load (countries list is empty)
-    // if (!generalInfo.countries) fetchStats();
+    if (!generalInfo.data.countries) fetchStats();
   }
 
   handleClick = option => {
@@ -48,7 +49,11 @@ export class Search extends Component {
       <div className="search-page-container">
         <div className="search-box-wrapper">
           <div className="left-side-wrapper">
-            <GeneralDataDisplay generalInfo={generalInfo} />
+            {generalInfo.fetching ? (
+              <Spinner />
+            ) : (
+              <GeneralDataDisplay generalInfo={generalInfo.data} />
+            )}
           </div>
           <div className="right-side-wrapper">
             <SearchArea
@@ -69,7 +74,7 @@ export class Search extends Component {
 
 export const mapStateToProps = state => {
   return {
-    generalInfo: state.generalInfo.data
+    generalInfo: state.generalInfo
   };
 };
 

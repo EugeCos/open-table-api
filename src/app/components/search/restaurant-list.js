@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { capitalizeFirstLetter } from "../../services/utils";
 import { connect } from "react-redux";
+import Spinner from "../common/spinner";
 import "./restaurant-list.scss";
 
 export class RestaurantList extends Component {
@@ -14,16 +15,15 @@ export class RestaurantList extends Component {
 
   componentDidUpdate(prevProps) {
     const { restaurants, searchValue, searchOption } = this.props;
+    const totalEntries = restaurants.data.total_entries;
     let resultsMessage;
-    if (prevProps.restaurants.total_entries !== restaurants.total_entries) {
+    if (prevProps.restaurants.data.total_entries !== totalEntries) {
       resultsMessage =
         searchOption === "City"
-          ? `${
-              restaurants.total_entries
-            } restaurants found in ${capitalizeFirstLetter(searchValue)}`
-          : `Found ${
-              restaurants.total_entries
-            } restaurants containing the name "${capitalizeFirstLetter(
+          ? `${totalEntries} restaurants found in ${capitalizeFirstLetter(
+              searchValue
+            )}`
+          : `Found ${totalEntries} restaurants containing the name "${capitalizeFirstLetter(
               searchValue
             )}"`;
       return this.setState({ resultsMessage });
@@ -51,11 +51,15 @@ export class RestaurantList extends Component {
           handlePriceFilter={this.handlePriceFilter}
           priceFilter={priceFilter}
         />
-        <List
-          restaurantsData={restaurants}
-          resultsMessage={resultsMessage}
-          priceFilter={priceFilter}
-        />
+        {restaurants.fetching ? (
+          <Spinner />
+        ) : (
+          <List
+            restaurantsData={restaurants.data}
+            resultsMessage={resultsMessage}
+            priceFilter={priceFilter}
+          />
+        )}
       </div>
     );
   }
@@ -63,7 +67,7 @@ export class RestaurantList extends Component {
 
 export const mapStateToProps = state => {
   return {
-    restaurants: state.restaurants.data
+    restaurants: state.restaurants
   };
 };
 
@@ -157,11 +161,13 @@ export const List = ({ restaurantsData, resultsMessage, priceFilter }) => {
     <div className="list-container">
       <h3>{resultsMessage}</h3>
       {restaurantListJSX}
-      <div className="page-indicator-container">
-        <i className="fas fa-angle-left" />
-        <h4>Page 1</h4>
-        <i className="fas fa-angle-right" />
-      </div>
+      {filteredRestaurantList.length ? (
+        <div className="page-indicator-container">
+          <i className="fas fa-angle-left" />
+          <h4>Page 1</h4>
+          <i className="fas fa-angle-right" />
+        </div>
+      ) : null}
     </div>
   );
 };

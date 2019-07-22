@@ -1,4 +1,8 @@
-import { getActionTypes, FETCH_RESTAURANTS } from "./reducer-constants";
+import {
+  getActionTypes,
+  FETCH_RESTAURANTS,
+  CLEAR_RESTAURANTS_LIST
+} from "./reducer-constants";
 
 const initialState = {
   total_entries: 0,
@@ -26,6 +30,11 @@ export default function restaurants(
         ...state,
         error: action.payload,
         fetching: false
+      };
+    case CLEAR_RESTAURANTS_LIST:
+      return {
+        ...state,
+        data: { ...initialState }
       };
     default:
       return state;

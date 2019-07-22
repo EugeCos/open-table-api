@@ -1,12 +1,16 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { updatePage } from "../../store/actions/user-actions";
+import {
+  updatePage,
+  clearRestaurantsList
+} from "../../store/actions/user-actions";
 import { Link } from "react-router-dom";
 import "./landing.scss";
 
 export class Landing extends Component {
   componentDidMount() {
     this.props.updatePage("");
+    this.props.clearRestaurantsList();
   }
 
   render() {
@@ -31,5 +35,5 @@ export const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { updatePage }
+  { updatePage, clearRestaurantsList }
 )(Landing);

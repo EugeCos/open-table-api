@@ -8,13 +8,13 @@
 
 .search-box-wrapper {
     display: flex;
-    border: 1px solid rgb(78, 37, 30);
+    border: 3px solid rgb(78, 37, 30);
 
     .left-side-wrapper {
         width: 50%;
         padding: 20px 15px;
         text-align: center;
-        border-right: 1px solid rgb(78, 37, 30);
+        border-right: 3px solid rgb(78, 37, 30);
 
         span:first-of-type {
             background-color: hsl(32, 100%, 50%);
