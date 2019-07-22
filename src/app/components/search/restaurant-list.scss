@@ -7,7 +7,8 @@
         width: 25%;
         margin-top: 10px;
 
-        .fa-money-bill-wave {
+        .fa-money-bill-wave,
+        .fa-list-ol {
             color: rgb(0, 195, 255)
         }
 
@@ -15,7 +16,28 @@
             p {
                 display: inline-block;
                 padding: 10px 15px;
-                margin: 15px 0;
+                margin: 15px 0 40px;
+                width: 55px;
+                text-align: center;
+                border: 1px solid rgb(92, 92, 92);
+                background: rgba(128, 128, 128, 0.062);
+                color: grey;
+                letter-spacing: 4px;
+                cursor: pointer;
+
+                &.selected {
+                    border: 2px solid rgb(0, 195, 255);
+                    background: rgba(105, 171, 209, 0.274);
+                    color: #fff;
+                }
+            }
+        }
+
+        .display-per-page-filter {
+            p {
+                display: inline-block;
+                padding: 5px 12px;
+                margin: 15px 10px 0 0;
                 width: 55px;
                 text-align: center;
                 border: 1px solid rgb(92, 92, 92);
@@ -93,6 +115,20 @@
                     color: rgba(85, 85, 85, 0.61);
                     text-shadow: 0 0 12px rgba(128, 128, 128, 0.39)
                 }
+            }
+        }
+
+        .page-indicator-container {
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            i {
+                font-size: 200%;
+                text-shadow: 0 0 6px #fff;
+                margin: 0 20px;
+                cursor: pointer
             }
         }
     }

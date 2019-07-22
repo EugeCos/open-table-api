@@ -21,7 +21,7 @@ export class Search extends Component {
     updatePage("search");
 
     // Only call fetchStats on initial page load (countries list is empty)
-    if (!generalInfo.countries) fetchStats();
+    // if (!generalInfo.countries) fetchStats();
   }
 
   handleClick = option => {

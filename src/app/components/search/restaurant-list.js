@@ -80,12 +80,22 @@ export const Filters = props => {
           <i className="fas fa-dollar-sign" />
         </p>
       </div>
+      <i class="fas fa-list-ol" />
+      &nbsp;&nbsp;&nbsp;Restaurants per page
+      <div className="display-per-page-filter">
+        <p className="">5</p>
+        <p className="">10</p>
+        <p className="">15</p>
+        <p className="selected">25</p>
+        <p className="">50</p>
+        <p className="">100</p>
+      </div>
     </div>
   );
 };
 
 export const List = ({ restaurantsData, resultsMessage }) => {
-  const { per_page, current_page, restaurants } = restaurantsData;
+  const { current_page, restaurants } = restaurantsData;
 
   const restaurantListJSX = restaurants.map((item, index) => {
     return (
@@ -102,9 +112,9 @@ export const List = ({ restaurantsData, resultsMessage }) => {
 
         <div className="price-wrapper">
           <i className="fas fa-dollar-sign" />
-          <i className="fas fa-dollar-sign" />
-          <i className="fas fa-dollar-sign" />
-          <i className="fas fa-dollar-sign greyed" />
+          <i className={`fas fa-dollar-sign ${item.price < 2 && "greyed"}`} />
+          <i className={`fas fa-dollar-sign ${item.price < 3 && "greyed"}`} />
+          <i className={`fas fa-dollar-sign ${item.price < 4 && "greyed"}`} />
         </div>
       </div>
     );
@@ -114,6 +124,11 @@ export const List = ({ restaurantsData, resultsMessage }) => {
     <div className="list-container">
       <h3>{resultsMessage}</h3>
       {restaurantListJSX}
+      <div className="page-indicator-container">
+        <i class="fas fa-angle-left" />
+        <h4>Page 1</h4>
+        <i class="fas fa-angle-right" />
+      </div>
     </div>
   );
 };
