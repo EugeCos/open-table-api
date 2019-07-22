@@ -9,6 +9,7 @@ export class RestaurantList extends Component {
     super();
     this.state = {
       priceFilter: ["displayAll"],
+      displayPerPage: 25,
       resultsMessage: ""
     };
   }
@@ -42,14 +43,20 @@ export class RestaurantList extends Component {
     this.setState({ priceFilter: priceFilterArrayCopy });
   };
 
+  updateDisplayPerPage = num => {
+    this.setState({ displayPerPage: num });
+  };
+
   render() {
     const { restaurants } = this.props;
-    const { priceFilter, resultsMessage } = this.state;
+    const { priceFilter, resultsMessage, displayPerPage } = this.state;
     return (
       <div className="restaurant-list-container">
         <Filters
           handlePriceFilter={this.handlePriceFilter}
+          updateDisplayPerPage={this.updateDisplayPerPage}
           priceFilter={priceFilter}
+          displayPerPage={displayPerPage}
         />
         {restaurants.fetching ? (
           <Spinner />
@@ -76,7 +83,24 @@ export default connect(
   {}
 )(RestaurantList);
 
-export const Filters = ({ handlePriceFilter, priceFilter }) => {
+export const Filters = ({
+  handlePriceFilter,
+  priceFilter,
+  updateDisplayPerPage,
+  displayPerPage
+}) => {
+  const displayPerPageOptionsJSX = [5, 10, 15, 25, 50, 100].map(option => {
+    return (
+      <p
+        className={option === displayPerPage ? "selected" : ""}
+        key={option}
+        onClick={() => updateDisplayPerPage(option)}
+      >
+        {option}
+      </p>
+    );
+  });
+
   return (
     <div className="filters-container">
       <i className="fa fa-money-bill-wave" />
@@ -109,14 +133,7 @@ export const Filters = ({ handlePriceFilter, priceFilter }) => {
       </div>
       <i className="fas fa-list-ol" />
       &nbsp;&nbsp;&nbsp;Restaurants per page
-      <div className="display-per-page-filter">
-        <p className="">5</p>
-        <p className="">10</p>
-        <p className="">15</p>
-        <p className="selected">25</p>
-        <p className="">50</p>
-        <p className="">100</p>
-      </div>
+      <div className="display-per-page-filter">{displayPerPageOptionsJSX}</div>
     </div>
   );
 };
