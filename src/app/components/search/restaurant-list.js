@@ -15,10 +15,7 @@ export class RestaurantList extends Component {
   componentDidUpdate(prevProps) {
     const { restaurants, searchValue, searchOption } = this.props;
     let resultsMessage;
-    if (
-      prevProps.restaurants.restaurants.length !==
-      restaurants.restaurants.length
-    ) {
+    if (prevProps.restaurants.total_entries !== restaurants.total_entries) {
       resultsMessage =
         searchOption === "City"
           ? `${
