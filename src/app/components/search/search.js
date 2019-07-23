@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { updatePage } from "../../store/actions/user-actions";
+import {
+  updatePage,
+  clearRestaurantsList
+} from "../../store/actions/user-actions";
 import { fetchStats, fetchRestaurants } from "../../store/actions/api-actions";
 import TextField from "material-ui/TextField";
 import RestaurantList from "./restaurant-list";
@@ -13,8 +16,9 @@ export class Search extends Component {
     this.state = {
       searchOption: "City",
       searchValue: "",
-      perPage: 25,
-      pageNumber: 1
+      displayPerPage: 25,
+      pageNumber: 1,
+      requestSubmitted: false
     };
   }
   componentDidMount() {
@@ -32,18 +36,40 @@ export class Search extends Component {
   };
 
   handleChange = e => {
-    this.setState({ searchValue: e.target.value });
+    this.setState({ searchValue: e.target.value, requestSubmitted: false });
+    if (this.props.hasSearchError) this.props.clearRestaurantsList();
   };
 
   handleSubmit = () => {
     // searchValue = eg. "toronto", "winnipeg", "ney york" etc
     // searchOption = "City" or "Restaurant"
-    const { searchValue, searchOption, pageNumber, perPage } = this.state;
-    this.props.fetchRestaurants(searchValue, searchOption, perPage, pageNumber);
+    const { searchValue, searchOption, displayPerPage } = this.state;
+    this.props.fetchRestaurants(searchValue, searchOption, displayPerPage, 1);
+    this.setState({
+      pageNumber: 1,
+      requestSubmitted: true
+    });
+  };
+
+  // Update display per page or update page number
+  updateDisplayContent = (perPage, pageNum) => {
+    const { searchValue, searchOption } = this.state;
+    if (pageNum === 0) return;
+
+    this.setState({ displayPerPage: perPage, pageNumber: pageNum });
+
+    if (!!searchValue)
+      this.props.fetchRestaurants(searchValue, searchOption, perPage, pageNum);
   };
 
   render() {
-    const { searchOption, searchValue, pageNumber } = this.state;
+    const {
+      searchOption,
+      searchValue,
+      displayPerPage,
+      pageNumber,
+      requestSubmitted
+    } = this.state;
     const { generalInfo } = this.props;
     return (
       <div className="search-page-container">
@@ -59,7 +85,6 @@ export class Search extends Component {
             <SearchArea
               searchOption={searchOption}
               searchValue={searchValue}
-              pageNumber={pageNumber}
               handleClick={this.handleClick}
               handleSubmit={this.handleSubmit}
               handleChange={this.handleChange}
@@ -67,7 +92,14 @@ export class Search extends Component {
           </div>
         </div>
 
-        <RestaurantList searchOption={searchOption} searchValue={searchValue} />
+        <RestaurantList
+          searchOption={searchOption}
+          searchValue={searchValue}
+          updateDisplayContent={this.updateDisplayContent}
+          displayPerPage={displayPerPage}
+          pageNumber={pageNumber}
+          requestSubmitted={requestSubmitted}
+        />
       </div>
     );
   }
@@ -75,13 +107,14 @@ export class Search extends Component {
 
 export const mapStateToProps = state => {
   return {
-    generalInfo: state.generalInfo
+    generalInfo: state.generalInfo,
+    hasSearchError: !!state.restaurants.error
   };
 };
 
 export default connect(
   mapStateToProps,
-  { updatePage, fetchStats, fetchRestaurants }
+  { updatePage, fetchStats, fetchRestaurants, clearRestaurantsList }
 )(Search);
 
 export const GeneralDataDisplay = ({ generalInfo }) => {

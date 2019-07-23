@@ -18,22 +18,23 @@ export default function restaurants(
   const REDUCER_RESTAURANTS = getActionTypes(FETCH_RESTAURANTS);
   switch (action.type) {
     case REDUCER_RESTAURANTS.FETCHING:
-      return { ...state, fetching: true };
+      return { ...state, error: "", fetching: true };
     case REDUCER_RESTAURANTS.FULFILLED:
       return {
-        ...state,
+        error: "",
         fetching: false,
         data: action.payload
       };
     case REDUCER_RESTAURANTS.REJECTED:
       return {
-        ...state,
+        data: { ...initialState },
         error: action.payload,
         fetching: false
       };
     case CLEAR_RESTAURANTS_LIST:
       return {
         ...state,
+        error: "",
         data: { ...initialState }
       };
     default:

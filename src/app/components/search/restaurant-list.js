@@ -9,8 +9,7 @@ export class RestaurantList extends Component {
   constructor() {
     super();
     this.state = {
-      priceFilter: ["displayAll"],
-      displayPerPage: 25,
+      priceFilter: ["off"],
       resultsMessage: ""
     };
   }
@@ -44,37 +43,46 @@ export class RestaurantList extends Component {
     this.setState({ priceFilter: priceFilterArrayCopy });
   };
 
-  updateDisplayPerPage = num => {
-    const {
-      searchValue,
-      searchOption,
-      pageNumber,
-      fetchRestaurants
-    } = this.props;
-    this.setState({ displayPerPage: num });
-
-    if (!!searchValue)
-      fetchRestaurants(searchValue, searchOption, num, pageNumber);
-  };
-
   render() {
-    const { restaurants } = this.props;
-    const { priceFilter, resultsMessage, displayPerPage } = this.state;
+    const {
+      restaurants,
+      updateDisplayContent,
+      displayPerPage,
+      pageNumber,
+      searchValue,
+      requestSubmitted
+    } = this.props;
+    const { priceFilter, resultsMessage } = this.state;
+    const nothingTypedError =
+      restaurants.error === "Bad Request" &&
+      !searchValue &&
+      "Oops, nothing typed";
+    const noResultsError =
+      !!searchValue &&
+      !restaurants.data.restaurants.length &&
+      requestSubmitted &&
+      `Sorry, nothing could be found with name "${searchValue}"`;
+    const displayError = nothingTypedError || noResultsError;
+
     return (
       <div className="restaurant-list-container">
         <Filters
           handlePriceFilter={this.handlePriceFilter}
-          updateDisplayPerPage={this.updateDisplayPerPage}
+          updateDisplayContent={updateDisplayContent}
           priceFilter={priceFilter}
           displayPerPage={displayPerPage}
+          pageNumber={pageNumber}
         />
         {restaurants.fetching ? (
           <Spinner />
         ) : (
           <List
             restaurantsData={restaurants.data}
-            resultsMessage={resultsMessage}
+            resultsMessage={resultsMessage || displayError}
+            updateDisplayContent={updateDisplayContent}
             priceFilter={priceFilter}
+            displayPerPage={displayPerPage}
+            pageNumber={pageNumber}
           />
         )}
       </div>
@@ -96,15 +104,16 @@ export default connect(
 export const Filters = ({
   handlePriceFilter,
   priceFilter,
-  updateDisplayPerPage,
-  displayPerPage
+  updateDisplayContent,
+  displayPerPage,
+  pageNumber
 }) => {
   const displayPerPageOptionsJSX = [5, 10, 15, 25, 50, 100].map(option => {
     return (
       <p
         className={`${option === displayPerPage && "selected"}`}
         key={option}
-        onClick={() => updateDisplayPerPage(option)}
+        onClick={() => updateDisplayContent(option, pageNumber)}
       >
         {option}
       </p>
@@ -148,12 +157,19 @@ export const Filters = ({
   );
 };
 
-export const List = ({ restaurantsData, resultsMessage, priceFilter }) => {
+export const List = ({
+  restaurantsData,
+  resultsMessage,
+  priceFilter,
+  updateDisplayContent,
+  pageNumber,
+  displayPerPage
+}) => {
   const { restaurants } = restaurantsData;
 
   // Filter restaurants by price rating
   let filteredRestaurantList = restaurants;
-  // If array contains any values apart from "displayAll", do filtering
+  // If array contains any values apart from "off", do filtering
   if (priceFilter.length !== 1) {
     filteredRestaurantList = restaurants.filter(
       item => priceFilter.indexOf(item.price) > -1
@@ -190,9 +206,15 @@ export const List = ({ restaurantsData, resultsMessage, priceFilter }) => {
       {restaurantListJSX}
       {filteredRestaurantList.length ? (
         <div className="page-indicator-container">
-          <i className="fas fa-angle-left" />
-          <h4>Page 1</h4>
-          <i className="fas fa-angle-right" />
+          <i
+            className="fas fa-angle-left"
+            onClick={() => updateDisplayContent(displayPerPage, pageNumber - 1)}
+          />
+          <h4>Page {pageNumber}</h4>
+          <i
+            className="fas fa-angle-right"
+            onClick={() => updateDisplayContent(displayPerPage, pageNumber + 1)}
+          />
         </div>
       ) : null}
     </div>
