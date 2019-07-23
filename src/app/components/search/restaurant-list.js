@@ -15,6 +15,7 @@ export class RestaurantList extends Component {
   }
 
   componentDidUpdate(prevProps) {
+    // Update search results message
     const { restaurants, searchValue, searchOption } = this.props;
     const totalEntries = restaurants.data.total_entries;
     let resultsMessage;
